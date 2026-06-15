@@ -1,0 +1,108 @@
+﻿
+
+    <!-- Bootstrap -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="~/css/chat-window.css" />
+
+
+<div class="marvin-messenger">
+    <div class="mm-wrapper d-flex">
+
+        <!-- LEFT SIDE -->
+        <div class="mm-sidebar">
+
+            <!-- Tabs -->
+            <div class="mm-tabs">
+                <button id="tab-internal" class="mm-tab active" onclick="switchTab('INTERNAL')">
+                    Airconi Team
+                </button>
+                <button id="tab-external" class="mm-tab" onclick="switchTab('EXTERNAL')">
+                    Customer Chat
+                </button>
+            </div>
+
+            <!-- Search -->
+            <div class="mm-search">
+                <input type="text" placeholder="Search..." id="chatSearch">
+            </div>
+
+            <!-- Users (DYNAMIC) -->
+            <div class="mm-users" id="userList">
+                <!-- 🔥 JS will inject users here -->
+            </div>
+
+        </div>
+
+        <!-- RIGHT SIDE -->
+        <div class="mm-chat">
+
+            <!-- HEADER -->
+            <div class="mm-header" id="chatHeader">
+                Select a user
+            </div>
+
+            <!-- MESSAGES -->
+            <div class="mm-messages" id="chatMessages">
+            </div>
+
+            <!-- INPUT -->
+            <!-- INPUT CONTAINER -->
+            <div class="mm-input-wrapper">
+
+                <!-- 🔥 INPUT ROW -->
+                <div class="mm-input">
+
+                    <button class="mm-btn mm-attach">
+                        <i class="bi bi-paperclip"></i>
+                        <input type="file" id="fileInput" hidden accept=".png,.jpg,.jpeg,.pdf,video/mp4" />
+                    </button>
+
+                    <input type="text" id="chatInput" placeholder="Type a message..." />
+
+                    <button class="mm-btn mm-send" onclick="sendMessage()">
+                        <i class="bi bi-send-fill"></i>
+                    </button>
+
+                </div>
+
+                <!-- 🔥 UPLOAD UI (OUTSIDE INPUT ROW) -->
+                <div id="uploadStatus" style="font-size:12px; margin-top:5px;"></div>
+
+                <div id="uploadProgressBar"
+                     style="height:5px; background:#ddd; border-radius:5px; overflow:hidden; display:none; margin-top:3px;">
+                    <div id="uploadProgress"
+                         style="height:100%; width:0%; background:#0d6efd;"></div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<!--Media Modal-->
+<div id="mediaModal" class="mm-modal" onclick="closeMediaModal()">
+    <span class="mm-modal-close">&times;</span>
+
+    <div class="mm-modal-content" onclick="event.stopPropagation()">
+        <img id="modalImage" style="display:none;" />
+        <video id="modalVideo" controls style="display:none;"></video>
+    </div>
+</div>
+
+<!--USer Summary Modal-->
+
+<div id="summaryModal" class="mm-modal">    
+    <div class="mm-modal-content">
+        <span class="mm-close" onclick="closeSummaryModal()">&times;</span>
+
+        <h5>Admin Summary</h5>
+        <div id="summaryContent"></div>
+    </div>
+</div>
+
+
+
+    <script src = "~/js/admin-chat.js"></script>
+

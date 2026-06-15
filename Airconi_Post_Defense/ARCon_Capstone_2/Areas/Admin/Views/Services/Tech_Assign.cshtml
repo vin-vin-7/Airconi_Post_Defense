@@ -1,0 +1,343 @@
+﻿@{
+    ViewData["Title"] = "Technician Assignment";
+    var status = "TECH_ASSIGN";
+}
+<link rel="stylesheet" href="~/css/render-rows.css" />
+
+
+<div id="loadingSpinner" class="text-center my-3" style="display:none;">
+    <div class="spinner-border text-primary" role="status"></div>
+</div>
+
+<div class= "header-bar">
+
+    <div class=" header-left">
+        <h4 class="mb-0">Technician Assignment (Service)</h4>
+        </div>
+
+        <div class="header-center">
+                <input type="text"
+                       id="techAssignSearchInput"
+                       class="form-control form-control-sm"
+                       placeholder="Search..."
+                       />
+            </div>
+
+        <div class="header-right">
+        <button class="btn btn-primary d-flex align-items-center gap-2"
+                onclick="location.href='/Admin/Services/Scheduled'">
+            <i class="bi bi-plus-circle"></i>
+            Scheduled Services >
+        </button>
+        </div>
+    </div>
+
+
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div id="serviceTechAssignInfo" class="text-muted small mt-1"></div>
+</div>
+
+
+<div class="order-tracker">
+    <a href="/Admin/Services/For_Confirmation"
+       class="step @(status == "FOR_CONFIRMATION" ? "active" : "")">
+        <div class="circle"></div>
+        <span>For Confirmation</span>
+    </a>
+
+    <div class="line"></div>
+
+    <a href="/Admin/Services/Processing"
+       class="step @(status == "PROCESSING" ? "active" : "")">
+        <div class="circle"></div>
+        <span>Processing</span>
+    </a>
+
+    <div class="line"></div>
+
+    <a href="/Admin/Services/Tech_Assign"
+       class="step @(status == "TECH_ASSIGN" ? "active" : "")">
+        <div class="circle"></div>
+        <span>Technician Assignment</span>
+    </a>
+
+    <div class="line"></div>
+
+    <a href="/Admin/Services/Scheduled"
+       class="step @(status == "SCHEDULED" ? "active" : "")">
+        <div class="circle"></div>
+        <span>Scheduled</span>
+    </a>
+    <div class="line"></div>
+
+    <a href="/Admin/Services/All_Bookings"
+       class="step @(status == "ALL_BOOKINGS" ? "active" : "")">
+        <div class="circle"></div>
+        <span>All Bookings History</span>
+    </a>
+
+    <a href="/Admin/Services/All_Service_Transactions"
+       class="step @(status == "ALL_TRANSACTIONS" ? "active" : "")">
+        <div class="circle"></div>
+        <span>All Service History</span>
+    </a>
+</div>
+
+<br>
+
+<table class="table table-hover align-middle">
+    <thead class="table-light">
+        <tr>
+            <th></th> <!-- for arrow -->
+            <th class="text-center small sortable" data-column="stRefCode" onclick="sort('stRefCode')">Service Transaction Code</th>
+            <th class="text-center small sortable" data-column="serviceBookingRefCode" onclick="sort('serviceBookingRefCode')">SB Reference Code</th>
+            <th class="text-center small sortable" data-column="customerName" onclick="sort('customerName')">Customer's Name'</th>
+            <th class="text-center small">Schedule</th>
+            <th class="text-center small sortable" data-column="actualScheduledDate" onclick="sort('actualScheduledDate')">Actual Sched Date</th>
+            <th class="text-center small sortable" data-column="actualSchedTime" onclick="sort('actualSchedTime')">Actual Sched Time</th>
+            <th class="text-center small sortable" data-column="estimatedCompletionDate" onclick="sort('estimatedCompletionDate')">Est. Completion Date</th>
+            <th class="text-center small sortable" data-column="estimatedCompletionTime" onclick="sort('estimatedCompletionTime')">Est. Completion Time</th>
+            <th class="text-center small sortable" data-column="noOfTechnicians" onclick="sort('noOfTechnicians')">Technicians Required</th>
+            <th class="text-center small sortable" data-column="difficultyRate" onclick="sort('difficultyRate')">Work Difficulty</th>
+            <th class="text-center small sortable" data-column="createdAt" onclick="sort('-')">ST Create Date</th>
+            <th class="text-center small">Status</th>
+            
+    </thead>
+
+    <tbody id="techAssignServicesTableBody">
+        <!-- injected by JS -->
+    </tbody>
+</table>
+
+
+<nav aria-label=" Tech Assign (Service) Pagination" class="mt-3">
+    <ul id="pagination" class="pagination justify-content-center">
+        <!-- pagination injected by JS -->
+    </ul>
+</nav>
+
+
+
+
+<!-- TECHNICIAN ASSIGNMENT MODAL -->
+<div class="modal fade" id="assignTechModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+
+            <!-- HEADER -->
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold">
+                    ⚙ Technician Assignment
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- BODY -->
+            <div class="modal-body">
+
+                <!-- 🔹 SECTION: INFO -->
+                <div class="mb-3">
+                    <h6 class="fw-bold mb-1">👨‍🔧 Assign Technicians</h6>
+                    <h6 class="fst-italic text-muted mb-3" style="font-size: 0.8rem;">
+                        Select available technicians for this service transaction.
+                    </h6>
+
+                    <div class="mb-2">
+                        <small class="text-muted">Technician Requirement</small>
+
+                        <div class="d-flex align-items-center gap-3 mt-1">
+
+                            <!-- Required -->
+                            <span>
+                                Required:
+                                <span id="requiredTechCount" class="fw-semibold text-primary">0</span>
+                            </span>
+
+                            <!-- Selected -->
+                            <span id="selectedTechCount" class="badge bg-light text-dark">
+                                0 / 0 selected
+                            </span>
+
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="my-3" />
+
+                <!-- 🔹 SECTION: TECHNICIAN LIST -->
+                <div>
+                    <h6 class="fw-bold mb-2">Available AC Technicians</h6>
+
+                    <div id="technicianList" class="row g-2">
+                        <!-- injected -->
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- FOOTER -->
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">
+                    Cancel
+                </button>
+
+                <button id="assignBtn" class="btn btn-success" disabled>
+                    Assign Technician(s)
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- CONFIRMATION MODAL -->
+<div class="modal fade" id="confirmModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow rounded-3">
+
+            <!-- HEADER -->
+            <div class="modal-header">
+                <h5 class="modal-title fw-semibold">
+                    Confirm Service Transaction
+                </h5>
+            </div>
+
+            <!-- BODY -->
+            <div class="modal-body text-center">
+
+                <p class="mb-2">
+                    Assigned technicians are fewer than required.
+                </p>
+
+                <p class="text-muted small mb-3">
+                    This may cause the service to take slightly longer to complete.
+                </p>
+
+                <p class="fw-semibold text-danger mb-2">
+                    Please wait <span id="countdownText">5</span> seconds...
+                </p>
+
+                <!-- Progress bar -->
+                <div class="progress" style="height: 6px;">
+                    <div id="countdownBar"
+                         class="progress-bar bg-success"
+                         style="width: 0%">
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- FOOTER -->
+            <div class="modal-footer">
+                <button class="btn btn-light border" data-bs-dismiss="modal">
+                    Cancel
+                </button>
+
+                <button id="confirmSubmitBtn"
+                        class="btn btn-success"
+                        disabled>
+                    Continue
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+<!--Cancel Service Transaction -->
+
+<!-- Modal 1: Cancel Transaction -->
+<div class="modal fade" id="cancelModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Cancel Service Transaction</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+
+                <label class="form-label fw-semibold">Reason for cancellation</label>
+                <textarea id="cancelReason"
+                          class="form-control"
+                          rows="3"
+                          placeholder="Enter reason..."
+                          required></textarea>
+
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">
+                    Back
+                </button>
+
+                <button id="proceedCancelBtn" class="btn btn-danger">
+                    Cancel Transaction
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Modal 2: Final Confirm -->
+<div class="modal fade" id="finalCancelModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title text-danger">Final Confirmation</h5>
+            </div>
+
+            <div class="modal-body text-center">
+
+                <p class="mb-2 fw-semibold">
+                    Are you sure you want to cancel this service transaction?
+                </p>
+
+                <p class="text-muted small mb-3">
+                    This action cannot be reverted.<br>
+                    All assigned technicians will be freed from this schedule.
+                </p>
+
+                <p class="text-danger fw-semibold">
+                    Confirm in <span id="cancelCountdownText">5</span>s
+                </p>
+
+                <div class="progress mt-2" style="height: 6px;">
+                    <div id="cancelCountdownBar"
+                         class="progress-bar bg-danger"
+                         style="width: 0%">
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">
+                    No
+                </button>
+
+                <button id="confirmCancelBtn"
+                        class="btn btn-danger"
+                        disabled>
+                    Yes, Cancel
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div id="toastContainer"
+     class="toast-container position-fixed top-0 end-0 p-3"
+     style="z-index: 9999;">
+</div>
+
+<script src="~/js/st-tech-assign.js"></script>

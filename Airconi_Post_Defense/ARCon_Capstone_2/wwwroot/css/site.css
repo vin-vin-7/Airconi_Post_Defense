@@ -1,0 +1,757 @@
+﻿/* =====================================================
+   GLOBAL (INTER + BALANCED)
+===================================================== */
+
+
+html {
+    font-size: 14px;
+}
+
+body {
+    margin: 0;
+    background-color: #f5f7fb;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    color: #1f2937;
+}
+
+/* =====================================================
+   LAYOUT
+===================================================== */
+
+.admin-wrapper {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* =====================================================
+   SIDEBAR
+===================================================== */
+
+.sidebar {
+    width: 280px;
+    background: linear-gradient(180deg, #0d3b66, #0a2c4a);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+}
+
+/* LOGO */
+.logo-placeholder {
+    padding: 14px;
+    text-align: center;
+}
+
+    .logo-placeholder img {
+        max-width: 200px;
+    }
+
+/* MENU */
+.menu {
+    flex: 1;
+    overflow-y: auto;
+}
+
+/* MENU ITEMS */
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    font-size: 15px;
+    color: #dce3ea;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+    .menu-item i {
+        font-size: 14px;
+    }
+
+    /* hover */
+    .menu-item:hover {
+        background: rgba(255,255,255,0.10);
+        color: #ffffff;
+    }
+
+    /* active */
+    .menu-item.active {
+        background: #0d6efd;
+        color: #ffffff;
+        font-weight: 600;
+    }
+
+    /* =====================================================
+   ACCORDION (FIXED & SMOOTH)
+===================================================== */
+
+    .menu-item.accordion-item {
+        display: block;
+    }
+
+/* clickable header */
+.accordion-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    cursor: pointer;
+    padding: 10px 14px;
+}
+
+    /* arrow */
+    .accordion-header .arrow {
+        margin-left: auto;
+        font-size: 0.8rem;
+        transition: transform 0.25s ease;
+    }
+
+/* submenu (collapsed) */
+.submenu {
+    display: flex;
+    flex-direction: column;
+    max-height: 0;
+    overflow: hidden;
+    padding-left: 28px;
+    transition: max-height 0.3s ease;
+}
+
+/* submenu (expanded) */
+.accordion-item.open .submenu {
+    max-height: 1000px; /* 🔥 FIX: no cutoff */
+}
+
+/* rotate arrow */
+.accordion-item.open .arrow {
+    transform: rotate(90deg);
+}
+
+/* submenu links */
+.submenu a {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.95rem; /* 🔥 slightly bigger */
+    font-weight: 600; /* 🔥 heavier */
+
+    padding: 7px 0;
+    color: #d1d5db;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+    .submenu a:hover {
+        color: #ffffff;
+        transform: translateX(2px); /* subtle movement */
+    }
+
+/* highlight active/open section */
+.accordion-item.open > .accordion-header {
+    background: rgba(255,255,255,0.08);
+}
+
+/* =====================================================
+   SCROLLBAR
+===================================================== */
+
+.menu::-webkit-scrollbar {
+    width: 6px;
+}
+
+.menu::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.2);
+    border-radius: 10px;
+}
+
+/* =====================================================
+   MAIN
+===================================================== */
+
+.main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: #f5f7fb;
+}
+
+/* =====================================================
+   NAVBAR
+===================================================== */
+
+.top-navbar {
+    height: 52px;
+    background: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    padding: 0 14px;
+    font-size: 0.8rem;
+}
+
+/* =====================================================
+   BODY
+===================================================== */
+
+.admin-body {
+    flex: 1;
+    overflow: auto;
+}
+
+    .admin-body.full-height {
+        height: calc(100vh - 52px);
+        overflow: hidden;
+    }
+
+        .admin-body.full-height > * {
+            height: 100%;
+        }
+
+/* =====================================================
+   UI POLISH
+===================================================== */
+
+.dropdown-menu {
+    border-radius: 8px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    border: none;
+    font-size: 0.8rem;
+}
+
+.btn {
+    border-radius: 6px;
+    font-size: 0.8rem;
+    padding: 6px 12px;
+}
+
+/* =====================================================
+   ORDER TRACKER
+===================================================== */
+
+.order-tracker {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin: 20px auto;
+}
+
+    .order-tracker .step {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        text-decoration: none;
+        color: #6b7280;
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+
+    .order-tracker .circle {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: #d1d5db;
+    }
+
+    .order-tracker .step.active {
+        color: #0d6efd;
+        font-weight: 600;
+    }
+
+        .order-tracker .step.active .circle {
+            background: #0d6efd;
+        }
+
+    .order-tracker .line {
+        height: 2px;
+        width: 40px;
+        background: #d1d5db;
+    }
+
+    .order-tracker .step.active + .line {
+    }
+
+/* =====================================================
+   HEADER BAR
+===================================================== */
+
+.header-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding: 12px 16px;
+    font-weight: 600;
+}
+
+.header-left {
+    flex: 1;
+    font-size: 0.95rem;
+}
+
+.header-center {
+    flex: 0 0 auto;
+}
+
+    .header-center input {
+        width: 600px;
+        max-width: 100%;
+    }
+
+.header-right {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    font-size: 0.9rem;
+}
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 768px) {
+
+    .sidebar {
+        position: fixed;
+        left: -220px;
+        top: 0;
+        height: 100%;
+        z-index: 1050;
+        transition: left 0.25s ease;
+    }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+    .sidebar-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.3);
+        z-index: 1040;
+        display: none;
+    }
+
+        .sidebar-overlay.active {
+            display: block;
+        }
+
+    .submenu {
+        max-height: 0;
+        overflow: hidden;
+    }
+
+    .accordion-item.open .submenu {
+        max-height: 300px;
+    }
+
+    .main {
+        width: 100%;
+    }
+
+    .top-navbar {
+        height: 46px;
+        font-size: 0.75rem;
+    }
+
+        .top-navbar .btn {
+            padding: 3px 8px;
+        }
+}
+
+/* =====================================================
+   MICRO IMPROVEMENTS
+===================================================== */
+
+* {
+    letter-spacing: -0.2px;
+}
+
+
+
+/*Add Colors*/
+/* =====================================================
+   ICON COLORS (SIDEBAR)
+===================================================== */
+
+/* default icon */
+.menu-item i {
+    transition: all 0.2s ease;
+}
+
+/* ===== MAIN MENU COLORS ===== */
+
+/* Home */
+.icon-home {
+    color: #3b82f6;
+}
+
+/* Sales */
+.icon-sales {
+    color: #f59e0b;
+}
+
+/* Users */
+.icon-users {
+    color: #06b6d4;
+}
+
+/* Orders */
+.icon-orders {
+    color: #10b981;
+}
+
+/* Inventory */
+.icon-inventory {
+    color: #8b5cf6;
+}
+
+/* Services */
+.icon-services {
+    color: #ef4444;
+}
+
+/* Chat */
+.icon-chat {
+    color: #0ea5e9;
+}
+
+/* Utilities */
+.icon-utilities {
+    color: #94a3b8;
+}
+
+/* ===== SUBMENU ICONS ===== */
+
+.icon-sub {
+    color: #9ca3af;
+    font-size: 13px;
+    width: 16px;
+    text-align: center;
+    margin-right: 6px;
+}
+
+/* =====================================================
+   HOVER EFFECT (POLISHED)
+===================================================== */
+
+/* brighten on hover */
+.menu-item:hover i,
+.submenu a:hover i {
+    filter: brightness(1.2);
+}
+
+/* active menu */
+.menu-item.active i {
+    color: #ffffff !important;
+}
+
+
+/* =====================================================
+   Technician selection
+===================================================== */
+/* CARD BASE */
+.tech-card {
+    cursor: pointer;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    transition: all 0.2s ease;
+}
+
+    /* HOVER */
+    .tech-card:hover {
+        border-color: #0d6efd;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    /* SELECTED STATE */
+    .tech-card.selected {
+        border: 2px solid #0d6efd;
+        background-color: #e7f1ff;
+        box-shadow: 0 6px 16px rgba(13,110,253,0.25);
+        transform: scale(1.02);
+    }
+
+        /* CHECK ICON */
+        .tech-card.selected::after {
+            content: "✔";
+            position: absolute;
+            top: 6px;
+            right: 8px;
+            background: #0d6efd;
+            color: white;
+            font-size: 12px;
+            padding: 3px 6px;
+            border-radius: 50%;
+        }
+
+/* ONLINE/OFFLINE DOT */
+.status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
+    .status-dot.online {
+        background: #28a745;
+    }
+
+    .status-dot.offline {
+        background: #dc3545;
+    }
+
+.review-summary-box {
+    padding: 20px;
+    border: 1px solid #edf0f2;
+    border-radius: 18px;
+    background: #fff;
+}
+
+.review-average-rating {
+    font-size: 42px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.review-card {
+    border: 1px solid #edf0f2;
+    border-radius: 18px;
+    padding: 18px;
+    margin-bottom: 14px;
+    background: #fff;
+}
+
+.review-stars {
+    font-size: 14px;
+}
+
+.review-comment {
+    color: #495057;
+    line-height: 1.6;
+}
+
+/*Summary Grid (Products admin side)*/
+
+.summary-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 18px;
+}
+
+.summary-info-item {
+    background: #f8fafc;
+    border: 1px solid #edf0f2;
+    border-radius: 18px;
+    padding: 16px;
+}
+
+.summary-info-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    font-weight: 700;
+    color: #6b7280;
+    margin-bottom: 8px;
+}
+
+.summary-info-value {
+    font-size: 15px;
+    font-weight: 600;
+    color: #111827;
+    word-break: break-word;
+}
+
+.summary-price-highlight {
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.1;
+}
+
+.summary-section-card {
+    background: #fff;
+    border: 1px solid #edf0f2;
+    border-radius: 22px;
+    padding: 22px;
+    margin-bottom: 20px;
+}
+
+.summary-section-title {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #111827;
+}
+
+/*WArrnaty claim spinner*/
+#loadingOverlay {
+
+    position: fixed;
+
+    top: 0;
+    left: 0;
+
+    width: 100vw;
+    height: 100vh;
+
+    z-index: 999999;
+
+    overflow: hidden;
+}
+
+.loading-overlay-backdrop {
+
+    position: absolute;
+
+    inset: 0;
+
+    background: rgba(0, 0, 0, 0.55);
+
+    backdrop-filter: blur(3px);
+}
+
+.loading-overlay-content {
+
+    position: absolute;
+
+    inset: 0;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
+
+    text-align: center;
+}
+
+.media-grid {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+}
+
+    .media-grid > div {
+        min-width: 320px;
+        max-width: 320px;
+        flex-shrink: 0;
+    }
+
+.media-card {
+    border-radius: 18px;
+    overflow: hidden;
+    background: #fff;
+    border: 1px solid #eceff3;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.04);
+}
+
+.media-preview-wrapper {
+    height: 240px;
+    background: #f8f9fa;
+    overflow: hidden;
+}
+
+.media-preview-image,
+.media-preview-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.media-preview-image {
+    cursor: zoom-in;
+    transition: transform 0.25s ease;
+}
+
+    .media-preview-image:hover {
+        transform: scale(1.03);
+    }
+
+.media-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.approve-input-group {
+    border: 1px solid #eef2f6;
+    border-radius: 16px;
+    padding: 18px;
+    background: #fcfcfd;
+    margin-bottom: 22px;
+}
+
+.approve-input-group-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #1f2937;
+}
+
+/*loading spinner*/
+
+/*Loading*/
+
+#loadingOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255,255,255,0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.spinner-wrapper {
+    position: relative;
+    width: 140px;
+    height: 140px;
+}
+
+/* Rotating Ring */
+.spinner-ring {
+    width: 100%;
+    height: 100%;
+    border: 6px solid #e0e0e0;
+    border-top: 6px solid #007bff; /* Change to your brand color */
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+/* Logo in Center (NOT rotating) */
+.logo-center {
+    position: absolute;
+    width: 150px;
+    height: 70px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.hidden {
+    display: none;
+}

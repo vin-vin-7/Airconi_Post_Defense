@@ -1,0 +1,126 @@
+﻿@{
+    ViewData["Title"] = "Processing";
+    var status = "PROCESSING"; // or ViewBag.Status// PAYMENT_PENDING, PROCESSING, TO_SHIP, IN_TRANSIT, DELIVERED, CANCELLED
+}
+<link rel="stylesheet" href="~/css/render-rows.css" />
+<div class="d-flex align-items-center mb-3">
+
+    <!-- LEFT: Title -->
+    <div>
+        <h4 class="mb-0">Processing (Transaction)</h4>
+    </div>
+
+    <!-- CENTER: Search -->
+    <div class="flex-grow-1 d-flex justify-content-center">
+        <input type="text"
+               id="paymentProcessingTransactionSearchInput"
+               class="form-control form-control-sm"
+               placeholder="Search processing transactions..."
+               style="max-width: 620px;" />
+    </div>
+    <!-- RIGHT: Create Delivery Button -->
+    <div>
+        <a href="/Admin/Transactions/CreateDelivery" class="btn btn-sm btn-primary">
+            Create Delivery
+        </a>
+    </div>
+</div>
+
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div id="processingTransactiontInfo" class="text-muted small mt-1"></div>
+</div>
+
+<div class="order-tracker">
+
+    <a href="/Admin/Transactions/Index"
+       class="step @(status == "PENDING_CONFIRMATION" ? "active" : "")">
+        <div class="circle"></div>
+        <span>Payment Pending</span>
+    </a>
+
+    <div class="line"></div>
+
+    <a href="/Admin/Transactions/Processing"
+       class="step @(status == "PROCESSING" ? "active" : "")">
+        <div class="circle"></div>
+        <span>Processing</span>
+    </a>
+
+    <div class="line"></div>
+
+    <a href="/Admin/Transactions/ForShipping"
+       class="step @(status == "BOOKED" ? "active" : "")">
+        <div class="circle"></div>
+        <span>To Ship</span>
+    </a>
+
+    <div class="line"></div>
+
+    <a href="/Admin/Transactions/InTransit"
+       class="step @(status == "IN_TRANSIT" ? "active" : "")">
+        <div class="circle"></div>
+        <span>In Transit</span>
+    </a>
+
+    <div class="line"></div>
+
+    <!-- Delivered -->
+    <a href="/Admin/Transactions/Delivered"
+       class="step @(status == "DELIVERED" ? "active" : "")">
+        <div class="circle"></div>
+        <span>Delivered</span>
+    </a>
+
+    <div class="divider">|</div>
+
+    <!-- Cancelled -->
+    <a href="/Admin/Transactions/Cancelled_Failed"
+       class="step @(status == "CANCELLED" ? "active" : "")">
+        <div class="circle"></div>
+        <span>Cancelled / Failed</span>
+    </a>
+
+</div>
+
+
+<table class="table table-hover align-middle">
+    <thead class="table-light">
+        <tr>
+            <th class="text-center small sortable" onclick="sort('transactionCode')">
+                Transaction Code
+            </th>
+            <th class="text-center small sortable" onclick="sort('customerName')">
+                Customer Name
+            </th>
+            <th>
+                Payment Method
+            </th>
+            <th class="text-center small sortable" onclick="sort('grandTotal')">
+                Grand Total
+            </th>
+            <th class="text-center small sortable" onclick="sort('-')">
+                Placed At
+            </th>
+            <th class="text-center small sortable" onclick="sort('dateConfirmed')">
+                Date Confirmed
+            </th>
+            <th>
+                Status
+            </th>
+        </tr>
+    </thead>
+
+    <tbody id="processingTransactionTableBody">
+        <!-- injected by JS -->
+    </tbody>
+</table>
+
+
+<nav aria-label="Processing Transaction Pagination" class="mt-3">
+    <ul id="pagination" class="pagination justify-content-center">
+        <!-- pagination injected by JS -->
+    </ul>
+</nav>
+
+<script src="~/js/transaction-processing.js"></script>

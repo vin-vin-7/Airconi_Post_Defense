@@ -1,0 +1,72 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
+
+namespace ARCon_Capstone_2.Models;
+
+public partial class customer_transaction
+{
+    [Key]
+    public int id { get; set; }
+
+    public int checkout_id { get; set; }
+
+    public int? payment_transaction_id { get; set; }
+
+    public string? transaction_code { get; set; }
+    public int customer_id { get; set; }
+    public bool? has_active_delivery { get; set; }
+
+    [Precision(12, 2)]
+    public decimal? grand_total { get; set; }
+
+    [StringLength(20)]
+    public string? payment_method { get; set; }
+
+    [StringLength(50)]
+    public string? shipping_method { get; set; }
+
+    public DateTime? created_at { get; set; }
+    public DateTime? date_confirmed { get; set; }
+    public DateTime? date_rejected { get; set; }
+
+    [StringLength(30)]
+    public string? status { get; set; }
+
+    [StringLength(15)]
+    public string? rejectedby { get; set; }
+
+
+    public DateTime? cancelled_at { get; set; }
+    [StringLength(15)]
+    public string? cancelled_by { get; set; }
+    [StringLength(200)]
+    public string? cancellation_reason { get; set; }
+
+    [ForeignKey("checkout_id")]
+    [InverseProperty("customer_transactions")]
+    public virtual checkout checkout { get; set; } = null!;
+
+    [ForeignKey("customer_id")]
+    [InverseProperty("customer_transactions")]
+    public virtual customer customer { get; set; } = null!;
+
+    [InverseProperty("customer_transaction")]
+    public virtual ICollection<order> orders { get; set; } = new List<order>();
+
+    [InverseProperty("customer_transaction")]
+    public virtual  ICollection<customer_rating> customer_ratings { get; set; }
+
+    [ForeignKey("payment_transaction_id")]
+    [InverseProperty("customer_transactions")]
+    public virtual payment_transaction? payment_transaction { get; set; }
+
+    [InverseProperty("customer_transaction")]
+    public virtual ICollection<delivery> deliveries { get; set; } = new List<delivery>();
+
+    [InverseProperty("customer_transaction")]
+    public virtual ICollection<outright_replacement_warranty> outright_replacement_warranties { get; set; }
+    = new List<outright_replacement_warranty>();
+}

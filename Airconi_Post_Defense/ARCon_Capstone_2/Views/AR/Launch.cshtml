@@ -1,0 +1,317 @@
+﻿@{
+    Layout = null;
+    var productModel = ViewBag.ProductModel;
+    var productName = ViewBag.ProductName;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <title>Place Aircon in Your Space - @productName</title>
+
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #1a1a2e;
+        }
+
+        model-viewer {
+            width: 100%;
+            height: 100vh;
+            background: #1a1a2e;
+        }
+
+        .loading {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.85);
+            color: white;
+            padding: 16px 24px;
+            border-radius: 40px;
+            z-index: 200;
+            font-size: 16px;
+        }
+
+        /* MAIN AR BUTTON */
+        .ar-button {
+            position: fixed !important;
+            bottom: 120px !important;
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+            background: #007aff !important;
+            color: white !important;
+            border: none !important;
+            border-radius: 50px !important;
+            padding: 18px 36px !important;
+            font-size: 18px !important;
+            font-weight: 600 !important;
+            cursor: pointer !important;
+            z-index: 1000 !important;
+            min-width: 300px !important;
+            text-align: center !important;
+            box-shadow: 0 6px 24px rgba(0,0,0,0.35) !important;
+            font-family: inherit !important;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Product info */
+        .product-info {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(8px);
+            color: white;
+            padding: 10px 16px;
+            border-radius: 12px;
+            z-index: 100;
+            font-size: 14px;
+            font-weight: 500;
+            pointer-events: none;
+            max-width: 60%;
+        }
+
+            .product-info small {
+                font-size: 11px;
+                opacity: 0.8;
+            }
+
+        /* QR CODE */
+        .qr-wrapper {
+            position: fixed;
+            top: 50%;
+            right: 30px;
+            transform: translateY(-50%);
+            z-index: 100;
+            background: white;
+            padding: 15px;
+            border-radius: 20px;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+            text-align: center;
+        }
+
+        #qrcode img,
+        #qrcode canvas {
+            width: 160px !important;
+            height: 160px !important;
+        }
+
+        .qr-label {
+            margin-top: 12px;
+            font-size: 12px;
+            color: #333;
+        }
+
+        .close-qr {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            font-size: 18px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: #999;
+        }
+
+        .status {
+            position: fixed;
+            bottom: 210px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: white;
+            background: rgba(0,0,0,0.6);
+            padding: 8px;
+            z-index: 100;
+            font-size: 12px;
+        }
+
+        @@media (max-width: 768px) {
+
+            .qr-wrapper {
+                display: none;
+            }
+
+            .ar-button {
+                padding: 16px 30px !important;
+                font-size: 16px !important;
+                min-width: 260px !important;
+                bottom: 110px !important;
+            }
+
+            .status {
+                bottom: 180px;
+                font-size: 11px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="product-info">
+        🧊 @productName
+        <br>
+        <small>View in your room</small>
+    </div>
+
+    <div class="loading" id="loading">
+        Loading 3D Model...
+    </div>
+
+    <div class="status" id="status">
+        Preparing AR experience
+    </div>
+
+    <!-- QR CODE -->
+    <div class="qr-wrapper" id="qrWrapper">
+        <button class="close-qr"
+                onclick="document.getElementById('qrWrapper').style.display='none'">
+            ×
+        </button>
+
+        <div id="qrcode"></div>
+
+        <div class="qr-label">
+            📱 SCAN WITH PHONE
+        </div>
+    </div>
+
+    <model-viewer id="viewer"
+                  src=""
+                  ar
+                  ar-modes="scene-viewer webxr quick-look"
+                  camera-controls
+                  auto-rotate
+                  auto-rotate-delay="500"
+                  rotation-per-second="15deg"
+                  shadow-intensity="0.8"
+                  exposure="1.2"
+                  environment-image="neutral"
+                  ar-scale="auto"
+                  ar-placement="wall"
+                  touch-action="pan-y"
+                  interaction-prompt="none"
+                  orbit-sensitivity="0.8"
+                  min-camera-orbit="auto auto 50%"
+                  max-camera-orbit="auto auto 300%"
+                  camera-orbit="0deg 75deg 2m"
+                  field-of-view="35deg">
+
+        <button slot="ar-button" class="ar-button">
+            📍 VIEW IN YOUR SPACE
+        </button>
+
+    </model-viewer>
+
+    <script>
+
+        const productModel = "@productModel";
+
+        const encodedModel = encodeURIComponent(productModel);
+
+        const modelUrl =
+            "https://raw.githubusercontent.com/MarkBr123/ar-models/main/"
+            + encodedModel +
+            ".glb";
+
+        const viewer = document.getElementById('viewer');
+
+        const loadingDiv = document.getElementById('loading');
+
+        const statusDiv = document.getElementById('status');
+
+        const qrWrapper = document.getElementById('qrWrapper');
+
+        viewer.src = modelUrl;
+
+        // QR CODE FOR DESKTOP
+        if (qrWrapper && window.innerWidth > 768) {
+
+            new QRCode(document.getElementById('qrcode'), {
+
+                text: window.location.href,
+
+                width: 160,
+                height: 160
+            });
+        }
+
+        const isMobile =
+            /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+        if (isMobile && qrWrapper) {
+            qrWrapper.style.display = 'none';
+        }
+
+        // MODEL LOADED
+        viewer.addEventListener('load', () => {
+
+            loadingDiv.style.display = 'none';
+
+            if (isMobile) {
+
+                statusDiv.textContent =
+                    '✓ Ready! Tap "VIEW IN YOUR SPACE" below';
+
+            } else {
+
+                statusDiv.textContent =
+                    '✓ Use mouse to inspect | Scan QR on phone for AR';
+            }
+        });
+
+        // ENTER / EXIT AR
+        viewer.addEventListener('ar-status', (event) => {
+
+            if (event.detail.status === 'session-started') {
+
+                statusDiv.style.display = 'none';
+
+                if (qrWrapper) {
+                    qrWrapper.style.display = 'none';
+                }
+            }
+
+            if (event.detail.status === 'session-ended') {
+
+                statusDiv.style.display = 'block';
+            }
+        });
+
+        
+        viewer.addEventListener('camera-change', () => {
+
+            if (viewer.autoRotate) {
+                viewer.autoRotate = false;
+            }
+        });
+
+        // ERROR
+        viewer.addEventListener('error', () => {
+
+            loadingDiv.style.display = 'none';
+
+            statusDiv.textContent =
+                '⚠️ Model unavailable. Please try again later.';
+        });
+
+    </script>
+
+</body>
+</html>

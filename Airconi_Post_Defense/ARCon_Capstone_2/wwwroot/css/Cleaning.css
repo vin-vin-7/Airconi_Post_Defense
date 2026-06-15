@@ -1,0 +1,688 @@
+﻿/* ================================
+   BASE LAYOUT
+================================ */
+.service-container {
+    max-width: 1150px;
+    margin: 40px auto;
+    padding: 20px;
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+.service-form {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 32px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+}
+
+/* ================================
+   PAGE SYSTEM
+================================ */
+.form-page {
+    display: none;
+}
+
+    .form-page.active {
+        display: block;
+    }
+
+/* ================================
+   TWO COLUMN LAYOUTS
+================================ */
+.form-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: start;
+}
+
+.booking-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 32px;
+    align-items: start;
+    width: 100%;
+}
+
+/* Panels (Page 2 uses booking-left/right) */
+.panel,
+.booking-left,
+.booking-right {
+    background: #fff;
+    border: 1px solid #e6e6e6;
+    border-radius: 14px;
+    padding: 24px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+    min-height: 220px;
+    color: #1f2937;
+}
+
+    .panel h2,
+    .booking-left h2,
+    .booking-right h2 {
+        font-size: 20px;
+        font-weight: 600;
+        margin-bottom: 20px;
+        padding-bottom: 12px;
+        border-bottom: 2px solid #f1f1f1;
+    }
+
+/* ================================
+   FORM ELEMENTS
+================================ */
+.form-group {
+    margin-bottom: 18px;
+}
+
+label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 2px solid #e2e2e2;
+    font-size: 14px;
+    background: #fafafa;
+    transition: all .2s ease;
+    box-sizing: border-box;
+}
+
+    input:focus, select:focus, textarea:focus {
+        outline: none;
+        border-color: #2196F3;
+        background: #fff;
+        box-shadow: 0 0 0 3px rgba(33,150,243,.12);
+    }
+
+textarea {
+    resize: vertical;
+    min-height: 90px;
+}
+
+/* ================================
+   RADIO GROUP
+================================ */
+.radio-group {
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+}
+
+    .radio-group label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 500;
+        cursor: pointer;
+    }
+
+/* ================================
+   AIRCON ENTRY (PAGE 1)
+================================ */
+.aircon-entry {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 18px;
+    margin-bottom: 18px;
+}
+
+.aircon-entry-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+.aircon-entry-title {
+    font-weight: 600;
+}
+
+.aircon-entry-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+}
+
+.units-warranty {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-top: 16px;
+}
+
+/* ================================
+   COUNTER
+================================ */
+.counter-box {
+    display: flex;
+    align-items: center;
+    border: 2px solid #e2e2e2;
+    border-radius: 10px;
+    overflow: hidden;
+    width: 130px;
+}
+
+    .counter-box button {
+        width: 38px;
+        height: 38px;
+        border: none;
+        background: #2196F3;
+        color: #fff;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+        .counter-box button:hover {
+            background: #1976d2;
+        }
+
+    .counter-box input {
+        flex: 1;
+        border: none;
+        text-align: center;
+        font-weight: 600;
+        background: #fff;
+    }
+
+/* ================================
+   SERVICES INCLUDED (PAGE 2 LEFT)
+================================ */
+.services-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    width: 100%;
+}
+
+.service-card {
+    border: 1px solid #dfe3e8;
+    border-radius: 12px;
+    padding: 14px;
+    background: #ffffff;
+}
+
+.svc-title {
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.svc-meta,
+.svc-submeta {
+    font-size: 12.5px;
+    color: #666;
+}
+
+.svc-price {
+    margin-top: 8px;
+    font-weight: 700;
+}
+
+/* ================================
+   ADDRESS BUTTON
+================================ */
+.address-btn {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: 2px dashed #cfcfcf;
+    background: #fafafa;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+    .address-btn:hover {
+        border-color: #2196F3;
+        background: #f0f7ff;
+    }
+
+.selected-address {
+    border: 1px solid #e0e0e0;
+    padding: 10px;
+    border-radius: 10px;
+    margin-top: 10px;
+    background: #fff;
+}
+
+.link-btn {
+    background: none;
+    border: none;
+    color: #2196F3;
+    font-size: 12px;
+    cursor: pointer;
+    padding: 0;
+}
+
+/* ================================
+   TOTAL + CTA
+================================ */
+.total-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    border-radius: 12px;
+    background: #f3f6fb;
+    margin: 18px 0;
+    font-size: 16px;
+}
+
+    .total-box strong {
+        font-size: 22px;
+        color: #0f172a;
+    }
+
+.btn-primary {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(145deg,#2e7d32,#1b5e20);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 14px rgba(46,125,50,.35);
+    }
+
+/* ================================
+   NAVIGATION BUTTONS
+================================ */
+.buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 36px;
+    padding-top: 22px;
+    border-top: 1px solid #eee;
+}
+
+.back-btn, .next-btn, .submit-btn {
+    padding: 12px 28px;
+    border-radius: 10px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+}
+
+.back-btn {
+    background: #f3f4f6;
+}
+
+.next-btn {
+    background: #2196F3;
+    color: #fff;
+}
+
+    .next-btn:hover {
+        background: #1976d2;
+    }
+
+.submit-btn {
+    background: #2e7d32;
+    color: #fff;
+}
+
+    .submit-btn:hover {
+        background: #1b5e20;
+    }
+
+/* ================================
+   PROGRESS INDICATOR
+================================ */
+.progress-indicator {
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    margin-bottom: 36px;
+}
+
+.progress-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    color: #888;
+    font-size: 14px;
+}
+
+    .progress-step.active {
+        color: #2196F3;
+        font-weight: 600;
+    }
+
+.progress-step-number {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #e0e0e0;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.progress-step.active .progress-step-number {
+    background: #2196F3;
+}
+
+/* ================================
+   UTILITIES
+================================ */
+.hidden {
+    display: none !important;
+}
+
+/* ================================
+   RESPONSIVE
+================================ */
+@media (max-width:900px) {
+    .form-split,
+    .booking-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .buttons {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .back-btn, .next-btn, .submit-btn {
+        width: 100%;
+    }
+
+    .aircon-entry-content,
+    .units-warranty {
+        grid-template-columns: 1fr;
+    }
+}
+
+.services-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+}
+/*Add Aircon Button*/
+.btn-add-aircon.primary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 12px 16px;
+    border: none;
+    background: linear-gradient(135deg, #1976d2, #1565c0);
+    color: white;
+    font-weight: 600;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transition: all 0.2s ease;
+}
+
+    .btn-add-aircon.primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+    }
+
+.btn-add-aircon .plus {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+/*Remove Aircon Button*/
+.remove-aircon-btn {
+    width: 20px;
+    height: 20px;
+    border: 10px;
+    border-radius: 50%;
+    background: transparent;
+    color: #888;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+}
+
+    .remove-aircon-btn:hover {
+        background: #f0f0f0;
+        color: #d32f2f;
+    }
+
+
+/*Estimate Total*/
+.price-card {
+    margin-top: 16px;
+    padding: 18px 20px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #f8fafc, #eef3f8);
+    border: 1px solid #e3e8ef;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.price-label {
+    font-size: 14px;
+    color: #667085;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+
+.price-value {
+    font-size: 26px;
+    font-weight: 700;
+    color: #0f172a;
+}
+/* ================================
+   PAGE 2 — LEFT PANEL (SERVICES)
+================================ */
+
+/* Services container */
+.services-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+/* Each service row (receipt style) */
+.service-card {
+    width: 100%;
+    box-sizing: border-box;
+    border: none;
+    border-bottom: 1px solid #eee;
+    border-radius: 0;
+    padding: 12px 0;
+}
+
+    .service-card:last-child {
+        border-bottom: none;
+    }
+
+/* Horizontal layout */
+.service-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    width: 100%;
+}
+
+/* LEFT SIDE (expands to fill space) */
+.service-main {
+    flex: 1; /* 🔥 stretch */
+    min-width: 0;
+}
+
+.service-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 2px;
+}
+
+.service-meta {
+    font-size: 12px;
+    color: #6b7280;
+}
+
+/* RIGHT SIDE INFO (compact) */
+.service-details {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex-shrink: 0; /* 🔥 stay compact */
+}
+
+/* Detail text */
+.detail .value {
+    font-size: 12px;
+    font-weight: 600;
+    color: #1f2937;
+    white-space: nowrap;
+}
+
+/* Units badge */
+.detail.units .value {
+    background: #eff6ff;
+    color: #2563eb;
+    padding: 4px 10px;
+    border-radius: 999px;
+}
+
+/* =========================
+   ADDRESS MODAL
+========================= */
+
+#addressModal .modal-content {
+    border: none;
+    border-radius: 24px;
+    overflow: hidden;
+    background: #f8fafc;
+    box-shadow: 0 18px 45px rgba(0,0,0,0.14);
+}
+
+/* HEADER */
+
+#addressModal .modal-header {
+    background: white;
+    border-bottom: 1px solid #edf0f5;
+    padding: 20px 24px;
+}
+
+#addressModal .modal-title {
+    font-size: 24px;
+    font-weight: 800;
+    color: #111827;
+}
+
+/* BODY */
+
+#addressModal .modal-body {
+    padding: 24px;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+/* ADDRESS LIST */
+
+.address-list {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+/* ADDRESS CARD */
+
+.address-card {
+    background: white;
+    border-radius: 20px;
+    padding: 22px;
+    border: 1px solid #edf0f5;
+    transition: 0.2s ease;
+    cursor: pointer;
+    position: relative;
+}
+
+    .address-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 24px rgba(0,0,0,0.07);
+        border-color: #2563eb;
+    }
+
+/* DEFAULT TAG */
+
+.address-default-badge {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    background: #2563eb;
+    color: white;
+    border-radius: 999px;
+    padding: 6px 12px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+}
+
+/* TITLE */
+
+.address-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 10px;
+}
+
+/* FULL ADDRESS */
+
+.address-full {
+    color: #4b5563;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* LANDMARK */
+
+.address-landmark {
+    margin-top: 10px;
+    font-size: 13px;
+    color: #6b7280;
+}
+
+/* EMPTY STATE */
+
+.address-empty {
+    background: white;
+    border-radius: 20px;
+    padding: 40px 20px;
+    text-align: center;
+    border: 1px dashed #dbe3ee;
+}
+
+.address-empty-icon {
+    font-size: 52px;
+    margin-bottom: 14px;
+}
+
+.address-empty-text {
+    font-size: 15px;
+    color: #6b7280;
+}

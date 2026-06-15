@@ -1,0 +1,685 @@
+﻿@section Styles {
+    <link rel="stylesheet" href="~/css/Cart.css" asp-append-version="true" />
+}
+
+@{
+    ViewData["Title"] = "My Services";
+}
+
+
+<br>
+<div class="orders-header">
+    <div class="orders-header-title">My Services</div>
+    <div class="orders-header-subtitle">
+        View and manage your service booking history.
+    </div>
+</div>
+
+<main class="container">
+    <br>
+
+    <div class="d-flex justify-content-end mb-3">
+        <select id="sortSelect" class="form-select w-auto">
+            <option value="latest">Date Booked (Latest)</option>
+            <option value="oldest">Date Booked (Oldest)</option>
+            <option value="priceAsc">Price (Cheaper to Pricier)</option>
+            <option value="priceDesc">Price (Pricier to Cheaper)</option>
+        </select>
+    </div>
+    <div class="tabs">
+        <button class="tab active" data-tab="Pending">Pending   @* <span class="badge">2</span> *@</button>
+        <button class="tab" data-tab="Processing">Processing@* <span class="badge">1</span> *@</button>
+        <button class="tab" data-tab="Scheduled">Scheduled</button>
+        <button class="tab" data-tab="Completed">Completed</button>
+        <button class="tab" data-tab="PartiallyCompleted">Partially Completed</button>
+        <button class="tab" data-tab="Failed">Failed</button>
+        <button class="tab" data-tab="Cancelled">Cancelled</button>
+    </div>
+
+    <div id="ordersList" class="orders-list mt-4"></div>
+
+
+    <div id="pagination" class="d-flex justify-content-center mt-4"></div>
+</main>
+
+
+<!--Cancellation Modals-->
+<!-- Stage 1 -->
+<div class="modal fade" id="cancelReasonModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content custom-modal">
+
+            <!-- HEADER -->
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-semibold">
+                    ⚠️ Cancel Service
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- BODY -->
+            <div class="modal-body pt-2">
+                <p class="text-muted mb-3">
+                    Please let us know why you're cancelling this service.
+                </p>
+
+                <textarea id="cancelReasonInput"
+                          class="form-control custom-textarea"
+                          rows="4"
+                          placeholder="Type your reason here..."></textarea>
+            </div>
+
+            <!-- FOOTER -->
+            <div class="modal-footer border-0 pt-2">
+                <button class="btn btn-light custom-btn-outline" data-bs-dismiss="modal">
+                    Back
+                </button>
+
+                <button class="btn btn-danger custom-btn-primary" onclick="openConfirmCancelModal()">
+                    Continue
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Stage 2 -->
+<div class="modal fade" id="confirmCancelModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content custom-modal text-center">
+
+            <div class="modal-body py-4 px-4">
+
+                <!-- ICON -->
+                <div class="mb-3">
+                    <div class="confirm-icon">
+                        ⚠️
+                    </div>
+                </div>
+
+                <!-- TITLE -->
+                <h5 class="fw-semibold mb-2">
+                    Are you sure?
+                </h5>
+
+                <!-- DESCRIPTION -->
+                <p class="text-muted mb-4">
+                    This action will cancel your service booking. This cannot be undone.
+                </p>
+
+                <!-- BUTTONS -->
+                <div class="d-flex justify-content-center gap-2">
+                    <button class="btn custom-btn-outline" data-bs-dismiss="modal">
+                        No, Go Back
+                    </button>
+
+                    <button class="btn custom-btn-danger" onclick="confirmCancelService()">
+                        Yes, Cancel
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- Stage 3 -->
+<div class="modal fade" id="cancelSuccessModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content custom-modal text-center">
+
+            <div class="modal-body py-4 px-4">
+
+                <!-- ICON -->
+                <div class="mb-3">
+                    <div class="confirm-icon" style="background:#f0fdf4; color:#16a34a;">
+                        ✓
+                    </div>
+                </div>
+
+                <!-- TITLE -->
+                <h5 class="fw-semibold mb-2 text-success">
+                    Cancelled Successfully
+                </h5>
+
+                <!-- MESSAGE -->
+                <p class="text-muted mb-4">
+                    Your service has been cancelled successfully.
+                </p>
+
+                <!-- BUTTON -->
+                <button class="btn custom-btn-primary" data-bs-dismiss="modal">
+                    OK
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="cannotCancelModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content custom-modal text-center">
+
+            <div class="modal-body py-4 px-4">
+
+                <!-- ICON -->
+                <div class="mb-3">
+                    <div class="confirm-icon" style="background:#fef2f2; color:#dc2626;">
+                        ❌
+                    </div>
+                </div>
+
+                <!-- TITLE -->
+                <h5 class="fw-semibold mb-2">
+                    Cannot Cancel Service
+                </h5>
+
+                <!-- MESSAGE -->
+                <p class="text-muted mb-4">
+                    The service is already processed and cannot be cancelled.
+                    Please contact customer support for assistance.
+                </p>
+
+                <!-- BUTTON -->
+                <button class="btn custom-btn-primary" data-bs-dismiss="modal">
+                    OK
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!--Details modal-->
+
+<div class="modal fade" id="serviceDetailsModal" tabindex="-1">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content custom-modal">
+
+            <!-- HEADER -->
+            <div class="modal-header border-0 pb-0">
+                <div>
+                    <h5 class="modal-title fw-semibold">📄 Service Details</h5>
+                    <div class="small text-muted">
+                        Transaction: <span id="d_transactionCode"></span>
+                    </div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- BODY -->
+            <div class="modal-body">
+
+                <!-- BOOKING -->
+                <h6 class="mt-2 mb-2">📦 Booking Info</h6>
+                <div class="details-grid">
+
+                    <div class="detail-box">
+                        <div class="label">Booking Code</div>
+                        <div class="value" id="d_bookingCode"></div>
+                    </div>
+
+                    <div class="detail-box">
+                        <div class="label">Status</div>
+                        <div class="value" id="d_status"></div>
+                    </div>
+
+                    <div class="detail-box">
+                        <div class="label">Scheduled Date</div>
+                        <div class="value" id="d_scheduledDate"></div>
+                    </div>
+
+                    <div class="detail-box">
+                        <div class="label">Preferred Time</div>
+                        <div class="value" id="d_time"></div>
+                    </div>
+
+                    <!-- 🔥 NEW -->
+                    <div class="detail-box">
+                        <div class="label">Property Type</div>
+                        <div class="value" id="d_propertyType"></div>
+                    </div>
+
+                    <div class="detail-box">
+                        <div class="label">Business Name</div>
+                        <div class="value" id="d_businessName"></div>
+                    </div>
+
+                    <div class="detail-box full">
+                        <div class="label">Customer Note</div>
+                        <div class="value" id="d_customerNote"></div>
+                    </div>
+
+                    <div class="detail-box">
+                        <div class="label">Failures</div>
+                        <div class="value" id="d_failureCount"></div>
+                    </div>
+
+                    <div class="detail-box">
+                        <div class="label">Partial Attempts</div>
+                        <div class="value" id="d_partialCount"></div>
+                    </div>
+
+                    <div class="detail-box full">
+                        <div class="label">Address</div>
+                        <div class="value" id="d_address"></div>
+                    </div>
+
+                </div>
+
+                <!-- CUSTOMER -->
+                <h6 class="mt-4 mb-2">👤 Customer</h6>
+                <div class="details-grid">
+                    <div class="detail-box">
+                        <div class="label">Name</div>
+                        <div class="value" id="d_customerName"></div>
+                    </div>
+
+                    <div class="detail-box">
+                        <div class="label">Contact</div>
+                        <div class="value" id="d_customerContact"></div>
+                    </div>
+                </div>
+
+                <!-- TRANSACTION -->
+                <h6 class="mt-4 mb-2">🔧 Transaction</h6>
+                <div class="details-grid">
+
+                    <div class="detail-box">
+                        <div class="label">Actual Date</div>
+                        <div class="value" id="d_actualDate"></div>
+                    </div>
+
+                    <div class="detail-box">
+                        <div class="label">Actual Time</div>
+                        <div class="value" id="d_actualTime"></div>
+                    </div>
+
+                    <div class="detail-box">
+                        <div class="label">Estimated Completion</div>
+                        <div class="value" id="d_estimatedDate"></div>
+                    </div>
+
+                    <div class="detail-box">
+                        <div class="label">Estimated Time</div>
+                        <div class="value" id="d_estimatedTime"></div>
+                    </div>
+
+                    <div class="detail-box">
+                        <div class="label">Completed Date</div>
+                        <div class="value" id="d_completedDate"></div>
+                    </div>
+
+                    <div class="detail-box">
+                        <div class="label">Completed Time</div>
+                        <div class="value" id="d_completedTime"></div>
+                    </div>
+
+                    <div class="detail-box">
+                        <div class="label">Rating</div>
+                        <div class="value" id="d_rating"></div>
+                    </div>
+
+                </div>
+
+                <!-- STATUS -->
+                <h6 class="mt-4 mb-2">⚠️ Status</h6>
+                <div class="custom-alert">
+                    <span id="d_remarks"></span>
+                </div>
+
+                <!-- SERVICES -->
+                <h6 class="mt-4 mb-2">🧰 Services</h6>
+                <div id="d_items" class="service-items"></div>
+
+                <!-- SUMMARY -->
+                <h6 class="mt-4 mb-2">💰 Summary</h6>
+
+                <div class="summary-box">
+                    <span>Total Amount</span>
+                    <span class="price">₱ <span id="d_total"></span></span>
+                </div>
+
+                <div class="summary-box">
+                    <span>Reservice Fees</span>
+                    <span class="price text-warning">
+                        <span id="d_reserviceFee"></span>
+                    </span>
+                </div>
+
+                <!-- HISTORY -->
+                <h6 class="mt-4 mb-2">📊 Service Attempts</h6>
+                <div id="d_transactions"></div>
+
+            </div>
+
+            <!-- FOOTER -->
+            <div class="modal-footer border-0">
+                <button class="btn custom-btn-outline" data-bs-dismiss="modal">
+                    Close
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- Service Rating -->
+<div class="modal fade" id="ratingModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rating-modal p-0">
+
+            <!-- HEADER -->
+            <div class="modal-header rating-header-box">
+
+                <!-- LEFT -->
+                <div class="rating-header">
+                    <h5>How’s your service so far? ❄️</h5>
+                    <p>We’d love to hear your thoughts. Your feedback helps us improve.</p>
+                </div>
+
+                <!-- RIGHT -->
+                <img src="/assets/airconi-logo.png" class="modal-logo" />
+
+                <!-- CLOSE -->
+                <button type="button" class="modal-close" data-bs-dismiss="modal">✕</button>
+            </div>
+
+            <!-- BODY -->
+            <div class="modal-body text-center">
+
+                <div id="ratingAlert" class="alert alert-danger d-none" role="alert"></div>
+
+                <div class="stars mb-2" id="starContainer">
+                    <span class="star" data-value="1">★</span>
+                    <span class="star" data-value="2">★</span>
+                    <span class="star" data-value="3">★</span>
+                    <span class="star" data-value="4">★</span>
+                    <span class="star" data-value="5">★</span>
+                </div>
+
+                <div id="ratingLabel" class="rating-label mb-3">
+                    Select your rating
+                </div>
+
+                <textarea id="ratingComment"
+                          class="form-control rating-textarea"
+                          placeholder="Share your experience (optional)..."
+                          maxlength="255"></textarea>
+
+            </div>
+
+            <!-- FOOTER -->
+            <div class="modal-footer rating-actions">
+                <button class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                <button id="submitRatingBtn" class="btn btn-primary">
+                    Submit
+                </button>
+            </div>
+
+            
+
+        </div>
+    </div>
+</div>
+
+<!--Toast-->
+<div id="toastContainer"
+     class="position-fixed top-0 end-0 p-3"
+     style="z-index: 9999;">
+</div>
+
+
+<!-- Warranty Claim Modal -->
+<div class="modal fade" id="warrantyClaimModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg rounded-4">
+
+            <!-- Header -->
+            <div class="modal-header border-0 pb-0">
+                <div>
+                    <h5 class="modal-title fw-bold d-flex align-items-center gap-2">
+                        <i class="bi bi-shield-check text-success"></i>
+                        Warranty Claim
+                    </h5>
+
+                    <small class="text-muted">
+                        Submit a warranty reservice request.
+                    </small>
+                </div>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal">
+                </button>
+            </div>
+
+            <!-- Body -->
+            <div class="modal-body pt-3">
+
+                <input type="hidden" id="warrantyBookingId">
+
+                <!-- Complaint -->
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">
+                        Complaint / Issue
+                    </label>
+
+                    <textarea class="form-control"
+                              id="warrantyComplaint"
+                              rows="4"
+                              placeholder="Describe the issue you're experiencing..."></textarea>
+                </div>
+
+                <!-- Preferred Schedule -->
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold">
+                            Preferred Date
+                        </label>
+
+                        <input type="date"
+                               class="form-control"
+                               id="warrantyPreferredDate">
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold">
+                            Preferred Time
+                        </label>
+
+                        <input type="time"
+                               class="form-control"
+                               id="warrantyPreferredTime">
+                    </div>
+
+                </div>
+
+                <!-- Upload -->
+                <div class="mb-3">
+
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <label class="form-label fw-semibold mb-0">
+                            Attachments
+                        </label>
+
+                        <button type="button"
+                                class="btn btn-sm btn-outline-primary"
+                                onclick="document.getElementById('warrantyFiles').click()">
+
+                            <i class="bi bi-plus-lg"></i>
+                            Add Image / Video
+                        </button>
+                    </div>
+
+                    <!-- Hidden File Input -->
+                    <input type="file"
+                           id="warrantyFiles"
+                           class="d-none"
+                           multiple
+                           accept="image/*,video/*">
+
+                    <!-- Preview Container -->
+                    <div id="warrantyPreviewContainer"
+                         class="d-flex flex-wrap gap-2">
+                    </div>
+
+                    <small class="text-muted">
+                        Supports images and videos up to 20MB total.
+                    </small>
+
+                </div>
+
+                <!-- Reminder -->
+                <div class="alert alert-light border d-flex gap-2 align-items-start small">
+                    <i class="bi bi-info-circle text-primary mt-1"></i>
+
+                    <div>
+                        Our support team may contact you first to help
+                        troubleshoot the issue before scheduling a technician revisit.
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Footer -->
+            <div class="modal-footer border-0 pt-0">
+
+                <button type="button"
+                        class="btn btn-light"
+                        data-bs-dismiss="modal">
+                    Cancel
+                </button>
+
+                <button type="button"
+                        class="btn btn-success px-4"
+                        onclick="submitWarrantyClaim()">
+
+                    <i class="bi bi-send-check"></i>
+                    Submit Claim
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- Global Loading Overlay -->
+<div id="loadingOverlay"
+     style="display:none;">
+
+    <div class="loading-overlay-backdrop"></div>
+
+    <div class="loading-overlay-content">
+
+        <div class="spinner-border text-light"
+             role="status"
+             style="width:4rem;height:4rem;">
+        </div>
+
+        <div class="mt-3 text-white fw-semibold">
+            Submitting warranty claim...
+        </div>
+
+    </div>
+</div>
+
+<!-- Warranty Success Modal -->
+<div class="modal fade"
+     id="warrantySuccessModal"
+     tabindex="-1"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 rounded-4 shadow-lg overflow-hidden">
+
+            <!-- Top Accent -->
+            <div style="
+                height:6px;
+                background:linear-gradient(
+                    90deg,
+                    #22c55e,
+                    #16a34a
+                );
+            "></div>
+
+            <div class="modal-body p-5 text-center">
+
+                <!-- Success Icon -->
+                <div class="mb-4">
+
+                    <div class="success-icon-wrapper mx-auto">
+
+                        <i class="bi bi-check-circle-fill"></i>
+
+                    </div>
+
+                </div>
+
+                <!-- Title -->
+                <h3 class="fw-bold mb-2">
+                    Warranty Claim Submitted
+                </h3>
+
+                <!-- Description -->
+                <p class="text-muted mb-4">
+
+                    Your warranty request has been successfully submitted.
+
+                    Our customer support team may first contact you
+                    to troubleshoot the issue before scheduling a
+                    technician revisit.
+
+                </p>
+
+                <!-- Info Box -->
+                <div class="alert border-0 rounded-4 text-start small mb-4"
+                     style="
+                        background:#f6fef8;
+                        color:#166534;
+                     ">
+
+                    <div class="d-flex gap-2">
+
+                        <i class="bi bi-info-circle-fill mt-1"></i>
+
+                        <div>
+
+                            You can track the status of your warranty
+                            request in your service history.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- Buttons -->
+                <div class="d-flex justify-content-center gap-2">
+
+                    <button type="button"
+                            class="btn btn-success px-4 rounded-pill"
+                            data-bs-dismiss="modal">
+
+                        <i class="bi bi-check2-circle me-1"></i>
+                        Okay
+                    </button>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/js/shop_js/shop_my-services.js"></script>
