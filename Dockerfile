@@ -1,13 +1,29 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+
 WORKDIR /src
 
 COPY . .
 
-RUN dotnet publish ARCon_Capstone_2/ARCon_Capstone_2.csproj -c Release -o /app/publish
+RUN dotnet restore ARCon_Capstone_2.sln
+
+RUN dotnet publish ARCon_Capstone_2/ARCon_Capstone_2.csproj \
+    -c Release \
+    -o /app/publish \
+    --no-restore
+
+# =========================================
+# RUNTIME
+# =========================================
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
+
 WORKDIR /app
 
 COPY --from=build /app/publish .
+
+# Render provides PORT environment variable
+ENV ASPNETCORE_URLS=http://+:10000
+
+EXPOSE 10000
 
 ENTRYPOINT ["dotnet", "ARCon_Capstone_2.dll"]
