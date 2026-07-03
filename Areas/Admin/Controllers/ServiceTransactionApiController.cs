@@ -130,6 +130,43 @@ public class ServiceTransactionApiController : ControllerBase
         });
     }
 
+
+    // Generate PDF summary for a single service transaction
+    [HttpGet("{id}/pdf")]
+    public async Task<IActionResult> GeneratePdf(int id)
+    {
+        var st = await _context.service_transactions
+            .Include(t => t.service_booking)
+                .ThenInclude(b => b.customer)
+            .Include(t => t.service_booking)
+                .ThenInclude(b => b.service_booking_items)
+                    .ThenInclude(i => i.services)
+                        .ThenInclude(s => s.service_categories)
+            .Include(t => t.service_booking)
+                .ThenInclude(b => b.service_booking_items)
+                    .ThenInclude(i => i.services)
+                        .ThenInclude(s => s.service_aircon_type)
+            .Include(t => t.service_transaction_technicians)
+            .Include(t => t.service_transaction_items)
+                .ThenInclude(i => i.service_booking_items)
+            .FirstOrDefaultAsync(t => t.id == id);
+
+        if (st == null)
+            return NotFound(new { message = "Service transaction not found" });
+
+        try
+        {
+            var document = new ServiceTransactionPdf(st);
+            var pdfBytes = document.GeneratePdf();
+
+            return File(pdfBytes, "application/pdf", $"ServiceTransaction-{st.st_ref_code}.pdf");
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = ex.Message });
+        }
+    }
+
     // Child Row
     [HttpGet("{bookingId}/items")]
     public async Task<IActionResult> GetBookingItems(int bookingId)
@@ -973,6 +1010,7 @@ public class ServiceTransactionApiController : ControllerBase
 
     ////////////////////////////////////////////////////////// This is the Service Booking and Service Transaction Master Summary /////////////////////////////////////////////////
     ///service-transaction-summary/{id}
+    
     [HttpGet("stsummary/{id}")]
     public async Task<IActionResult> GetServiceTransactionSummary(int id)
     {
@@ -1056,7 +1094,7 @@ public class ServiceTransactionApiController : ControllerBase
                     cancelledAt = transaction.date_cancelled,
                     cancellationReason = transaction.cancellation_reason,
 
-                    // ================= 🔥 STATUS DETAILS (ADDED) =================
+                    // ================= STATUS DETAILS (ADDED) =================
                     statusDetails = new
                     {
                         isFailed = transaction.status == "FAILED",

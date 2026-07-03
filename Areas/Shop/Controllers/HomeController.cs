@@ -55,6 +55,10 @@ namespace ARCon_Capstone_2.Areas.Controllers
         {
             return View();
         }
+        public IActionResult ForgetPassword()
+        {
+            return View();
+        }
 
         public IActionResult Signin()
         {
