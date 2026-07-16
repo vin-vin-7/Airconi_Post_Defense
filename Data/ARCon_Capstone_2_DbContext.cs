@@ -157,12 +157,26 @@ public partial class ARCon_Capstone_2_DbContext : DbContext
 
     public virtual DbSet<products_media> products_medias { get; set; }
 
+    /*protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+            #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+         => optionsBuilder.UseNpgsql(
+            "Host=dpg-d7oethosfn5c739bjk10-a.singapore-postgres.render.com;Port=5432;Database=arcon_db;Username=arcon_db_user;Password=NTa14fwUh7O4wq5eKCBxJb3sSLbKQ1Vz;SSL Mode=Require;"
+         );*/
+
+    /* 
+     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+     {
+         if (!optionsBuilder.IsConfigured)
+         {
+             optionsBuilder.UseNpgsql("Host=dpg-d7oethosfn5c739bjk10-a.singapore-postgres.render.com;Port=5432;Database=arcon_db;Username=arcon_db_user;Password=NTa14fwUh7O4wq5eKCBxJb3sSLbKQ1Vz;SSL Mode=Require;Trust Server Certificate=true");
+         }
+     }*/
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         if (!optionsBuilder.IsConfigured)
         {
-            optionsBuilder.UseNpgsql("Host=aws-1-ap-northeast-1.pooler.supabase.com;Port=5432;Database=postgres;Username=postgres.izkizwrwtddqzkminmgl;Password=Tv9812!<GG#1+;SSL Mode=Require;Trust Server Certificate=true;");
+            optionsBuilder.UseNpgsql("Host=dpg-d8dek799rddc739sb960-a.singapore-postgres.render.com;Port=5432;Database=arcon_db_tqoz;Username=arcon_db_tqoz_user;Password=CADKjSLwzgJUi003pO4U3yGLOiDls7wv;SSL Mode=Require;Trust Server Certificate=true");
         }
     }
     

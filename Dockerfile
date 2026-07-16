@@ -1,28 +1,25 @@
+# Build stage
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-
 WORKDIR /src
 
+# Copy csproj and restore dependencies
 COPY . .
 
-RUN dotnet restore ARCon_Capstone_2.csproj
+# Restore dependencies
+RUN dotnet restore
 
-RUN dotnet publish ARCon_Capstone_2.csproj \
-    -c Release \
-    -o /app/publish \
-    --no-restore
+# Build and publish
+RUN dotnet publish -c Release -o /app/publish
 
-# =========================================
-# RUNTIME
-# =========================================
-
+# Runtime stage
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
-
 WORKDIR /app
 
+# Copy published output
 COPY --from=build /app/publish .
 
-ENV ASPNETCORE_URLS=http://+:10000
+# Render uses PORT env variable
+ENV ASPNETCORE_URLS=http://0.0.0.0:10000
 
-EXPOSE 10000
-
+# Replace with your DLL name
 ENTRYPOINT ["dotnet", "ARCon_Capstone_2.dll"]

@@ -504,7 +504,7 @@ public class ConversationAdminApiController : ControllerBase
         {
             using var httpClient = new HttpClient();
 
-            //  MAKE REQUEST LOOK LIKE A REAL BROWSER (this didnt work)
+            //  MAKE REQUEST LOOK LIKE A REAL BROWSER
             httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0");
             httpClient.DefaultRequestHeaders.Add("Accept", "*/*");
 
